@@ -29,14 +29,27 @@ public class SUB_Intake extends SubsystemBase {
     }
 
     public void setIntakeForward(){
-        m_IntakeMotor.set(ControlMode.PercentOutput,0.3);
+        m_IntakeMotor.set(ControlMode.PercentOutput, 0.3);
     }
 
     public void setIntakeReverse(){
-        m_IntakeMotor.set(ControlMode.PercentOutput,-0.3);
+        m_IntakeMotor.set(ControlMode.PercentOutput, -0.3);
     }
+
     public void setIntakeOff(){
         m_IntakeMotor.set(ControlMode.PercentOutput, 0);
+    }
+
+    public void setIntakeMode()
+    {
+        setDeployIntake();
+        setIntakeForward();
+    }
+
+    public void setIntakeModeOff()
+    {
+        setIntakeOff();
+        setRetractIntake();
     }
 }
         

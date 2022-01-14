@@ -4,9 +4,16 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.DriveConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,6 +26,12 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  // private CANSparkMax m_ShooterMaster = new CANSparkMax(DriveConstants.kShooterMaster, MotorType.kBrushless);
+  // private CANSparkMax m_ShooterSlave = new CANSparkMax(DriveConstants.kShooterSlave, MotorType.kBrushless);
+
+  // private RelativeEncoder m_ShooterMasterEncoder = m_ShooterMaster.getEncoder();
+  // private RelativeEncoder m_ShooterSlaveEncoder = m_ShooterSlave.getEncoder();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +41,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    // m_ShooterSlave.follow(m_ShooterMaster, true);
+    // m_ShooterMaster.setInverted(true);
   }
 
   /**
@@ -44,6 +59,13 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // System.out.println("Shooter Position: " + m_ShooterMasterEncoder.getPosition());
+    // System.out.println("Shooter Velocity: " + m_ShooterMasterEncoder.getVelocity());
+    // System.out.println("------------------------------------------------");
+    // SmartDashboard.putNumber("Shooter Velocity", m_ShooterMasterEncoder.getVelocity());
+    // SmartDashboard.putNumber("Shooter Position", m_ShooterMasterEncoder.getPosition());
+    // SmartDashboard.putNumber("Slave Velocity", m_ShooterSlaveEncoder.getVelocity());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

@@ -14,6 +14,7 @@ package frc.robot;
  */
 public final class Constants {
   public static final class DriveConstants {
+    //drive train
     public static final int kLeftMotor1Port = 15;
     public static final int kLeftMotor2Port = 14;
     public static final int kRightMotor1Port = 16;
@@ -29,7 +30,26 @@ public final class Constants {
     public static final double kEncoderDistancePerPulse =
         // Assumes the encoders are directly mounted on the wheel shafts
         (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
+    
+    //shooter
+    public static final int kShooterMaster = 2;
+    public static final int kShooterSlave = 3;
 
+    public static final int kShooterP = 0;
+    public static final int kShooterI = 0;
+    public static final int kShooterD = 0;
+
+    public static final double kShooterSpeed = 0.3;
+
+    //indexer
+    public static final int kIndexerTop = 10;
+    public static final int kIndexerBottom = 4;
+    public static final int kIndexerBack = 11;
+
+    public static final double kIndexerFSpeed = 0.3;
+    public static final double kIndexerRSpeed = -0.3;
+    
+    //gyro
     public static final boolean kGyroReversed = false;
 
     public static final double kStabilizationP = 1;

@@ -16,15 +16,13 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-  // The motors on the left side of the drive.
-
   private CANSparkMax m_motor_L1 = new CANSparkMax(DriveConstants.kLeftMotor1Port, MotorType.kBrushless);
   private CANSparkMax m_motor_L2 = new CANSparkMax(DriveConstants.kLeftMotor2Port, MotorType.kBrushless);
+
   private CANSparkMax m_motor_R1 = new CANSparkMax(DriveConstants.kRightMotor1Port, MotorType.kBrushless);
   private CANSparkMax m_motor_R2 = new CANSparkMax(DriveConstants.kRightMotor2Port, MotorType.kBrushless);
-
   
-
+  // The motors on the left side of the drive.
   private final MotorControllerGroup m_leftMotors =
       new MotorControllerGroup(
           m_motor_L1,

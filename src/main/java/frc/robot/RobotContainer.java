@@ -31,7 +31,9 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final SUB_GearShift m_GearShift = new SUB_GearShift();
   private final SUB_Climb m_Climb = new SUB_Climb();
- // private final SUB_Intake m_Intake = new SUB_Intake();
+  private final SUB_Intake m_Intake = new SUB_Intake();
+  private final SUB_Indexer m_Indexer = new SUB_Indexer();
+  private final SUB_Shooter m_Shooter = new SUB_Shooter();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -96,11 +98,14 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
         .whenPressed(new CMD_DrivetrainSetHighGear(m_GearShift))
         .whenReleased(new CMD_DrivetrainSetLowGear(m_GearShift));
-    
-    new JoystickButton(m_driverController, Button.kB.value)
-        .whenPressed(new SequentialCommandGroup(new CMD_ReleaseWinchRatchet(m_Climb), new CMD_ClimbUp(m_Climb)))
-        .whenReleased(new CMD_ClimbDown(m_Climb));
-    // new JoystickButton(m_driverController, Button.kBumperRight.value)
+        
+    // //testing climb
+    // new JoystickButton(m_driverController, Button.kB.value)
+    //     .whenPressed(new SequentialCommandGroup(new CMD_ReleaseWinchRatchet(m_Climb), new CMD_ClimbUp(m_Climb)))
+    //     .whenReleased(new CMD_ClimbDown(m_Climb));
+
+    // //testing intake
+    // new JoystickButton(m_driverController, Button.kRightBumper.value)
     //     .whenPressed(new CMD_DeployIntake(m_Intake))
     //     .whenReleased(new CMD_RetractIntake(m_Intake));
     // new JoystickButton(m_driverController, Button.kY.value) 
@@ -109,6 +114,23 @@ public class RobotContainer {
     //     .whenPressed(new CMD_IntakeReverse(m_Intake));
     // new JoystickButton(m_driverController, Button.kX.value)
     //     .whenPressed(new CMD_IntakeOff(m_Intake));
+
+    //testing indexer
+    // new JoystickButton(m_driverController, Button.kA.value)
+    //     .whenPressed(new CMD_IndexerForward(m_Indexer))
+    //     .whenReleased(new CMD_IndexerOff(m_Indexer));
+    // new JoystickButton(m_driverController, Button.kB.value)
+    //     .whenPressed(new CMD_IndexerReverse(m_Indexer))
+    //     .whenReleased(new CMD_IndexerOff(m_Indexer));
+    // new JoystickButton(m_driverController, Button.kY.value)
+    //     .whenPressed(new CMD_IndexerOff(m_Indexer));
+
+    //testing intake mode
+    new JoystickButton(m_driverController, Button.kX.value)
+        .whenPressed(new SequentialCommandGroup(new CMD_ShooterReady(m_Shooter)
+            , new CMD_FeedShooter(m_Indexer)));
+        // .whenPressed(new CMD_IntakeMode(m_Intake, m_Indexer))
+        // .whenReleased(new CMD_IntakeModeOff(m_Intake, m_Indexer));
     
   }
 
