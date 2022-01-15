@@ -6,18 +6,15 @@ import frc.robot.subsystems.SUB_Intake;
 
 public class CMD_IntakeMode extends CommandBase{
     private SUB_Intake m_Intake;
-    private SUB_Indexer m_Indexer;
 
-    public CMD_IntakeMode(SUB_Intake p_Intake, SUB_Indexer p_Indexer)
+    public CMD_IntakeMode(SUB_Intake p_Intake)
     {
         m_Intake = p_Intake;
-        m_Indexer = p_Indexer;
     }
 
     @Override
     public void initialize() {
         m_Intake.setIntakeMode();
-        m_Indexer.setIndexerForward();
     }
 
     @Override

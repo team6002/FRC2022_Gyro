@@ -3,18 +3,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Indexer;
 
-public class CMD_FeedShooter extends CommandBase{
-    private SUB_Indexer m_Indexer;
+public class CMD_IndexerBackOn extends CommandBase{
+    SUB_Indexer m_Indexer;
 
-    public CMD_FeedShooter(SUB_Indexer p_Indexer)
+    public CMD_IndexerBackOn(SUB_Indexer p_Indexer)
     {
         m_Indexer = p_Indexer;
     }
-    
+
     @Override
     public void initialize() {
-        System.out.println("Feed shooter " + m_Indexer.getInverted());
-        m_Indexer.setFeedShooter();
+        m_Indexer.setBackOn();
     }
 
 
@@ -22,4 +21,5 @@ public class CMD_FeedShooter extends CommandBase{
     public boolean isFinished() {
         return true;
     }
+    
 }

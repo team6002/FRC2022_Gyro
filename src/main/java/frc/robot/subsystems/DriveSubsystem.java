@@ -54,8 +54,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_motor_L1.setInverted(true);
     m_motor_L2.setInverted(true);
-    m_motor_R1.setInverted(true);
-    m_motor_R2.setInverted(true);
+    m_motor_R1.setInverted(false);
+    m_motor_R2.setInverted(false);
   }
 
   /**

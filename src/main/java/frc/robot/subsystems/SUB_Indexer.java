@@ -11,16 +11,21 @@ public class SUB_Indexer {
     private CANSparkMax m_IndexerBack = new CANSparkMax(DriveConstants.kIndexerBack, MotorType.kBrushless);
 
     public SUB_Indexer(){
+        System.out.println("invert indexer");
         m_IndexerBottom.setInverted(true);
         m_IndexerTop.setInverted(true);
         m_IndexerBack.setInverted(true);
+    }
+
+    public boolean getInverted()
+    {
+        return m_IndexerBack.getInverted();
     }
 
     public void setIndexerForward()
     {
         m_IndexerTop.set(DriveConstants.kIndexerFSpeed);
         m_IndexerBottom.set(DriveConstants.kIndexerFSpeed);
-        m_IndexerBack.set(DriveConstants.kIndexerFSpeed);
     }
 
     public void setIndexerReverse()
@@ -35,6 +40,16 @@ public class SUB_Indexer {
         m_IndexerTop.set(DriveConstants.kIndexerFSpeed);
         m_IndexerBottom.set(DriveConstants.kIndexerRSpeed);
         m_IndexerBack.set(DriveConstants.kIndexerRSpeed);
+    }
+
+    public void setBackOn()
+    {
+        m_IndexerBack.set(DriveConstants.kIndexerFSpeed);
+    }
+
+    public void setBackOff()
+    {
+        m_IndexerBack.set(0);
     }
 
     public void setIndexerOff()

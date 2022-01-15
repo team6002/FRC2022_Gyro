@@ -35,18 +35,28 @@ public final class Constants {
     public static final int kShooterMaster = 2;
     public static final int kShooterSlave = 3;
 
-    public static final int kShooterP = 0;
-    public static final int kShooterI = 0;
-    public static final int kShooterD = 0;
+    public static final double kShooterFF = 0.000180; //Danny's numbers
+    public static final double kShooterP = 0.00068;
+    public static final double kShooterI = 0; 
+    public static final double kShooterD = 0.00000750;
+
+    public static final double kShootingVelocity = 2200;
+    public static final double kShootingAccel = 1000;
+
+    public static final double kMinOutput = -1;
+    public static final double kMaxOutput = 1;
 
     public static final double kShooterSpeed = 0.3;
+
+    //turret
+    public static final int kTurretMotor = 5;
 
     //indexer
     public static final int kIndexerTop = 10;
     public static final int kIndexerBottom = 4;
-    public static final int kIndexerBack = 11;
+    public static final int kIndexerBack = 18;
 
-    public static final double kIndexerFSpeed = 0.3;
+    public static final double kIndexerFSpeed = 0.5;
     public static final double kIndexerRSpeed = -0.3;
     
     //gyro

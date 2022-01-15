@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.controller.PIDController;
@@ -13,11 +14,14 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.triggers.DigitalSensor;
+import frc.robot.triggers.TRG_Subsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -34,6 +38,8 @@ public class RobotContainer {
   private final SUB_Intake m_Intake = new SUB_Intake();
   private final SUB_Indexer m_Indexer = new SUB_Indexer();
   private final SUB_Shooter m_Shooter = new SUB_Shooter();
+  private final DigitalSensor m_Sensor = new DigitalSensor(0);
+  private final FSM_Robot m_FSM_Robot = new FSM_Robot();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -116,9 +122,9 @@ public class RobotContainer {
     //     .whenPressed(new CMD_IntakeOff(m_Intake));
 
     //testing indexer
-    // new JoystickButton(m_driverController, Button.kA.value)
-    //     .whenPressed(new CMD_IndexerForward(m_Indexer))
-    //     .whenReleased(new CMD_IndexerOff(m_Indexer));
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whenPressed(new CMD_IndexerForward(m_Indexer))
+        .whenReleased(new CMD_IndexerOff(m_Indexer));
     // new JoystickButton(m_driverController, Button.kB.value)
     //     .whenPressed(new CMD_IndexerReverse(m_Indexer))
     //     .whenReleased(new CMD_IndexerOff(m_Indexer));
@@ -127,11 +133,34 @@ public class RobotContainer {
 
     //testing intake mode
     new JoystickButton(m_driverController, Button.kX.value)
-        .whenPressed(new SequentialCommandGroup(new CMD_ShooterReady(m_Shooter)
-            , new CMD_FeedShooter(m_Indexer)));
-        // .whenPressed(new CMD_IntakeMode(m_Intake, m_Indexer))
-        // .whenReleased(new CMD_IntakeModeOff(m_Intake, m_Indexer));
-    
+        .whenPressed(new SequentialCommandGroup(
+            new CMD_ShooterReady(m_Shooter)
+            , new CMD_FeedShooter(m_Indexer)
+            , new WaitCommand(1)
+            , new CMD_IndexerOff(m_Indexer)
+            , new CMD_ShooterOff(m_Shooter)));
+
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+        .whenPressed(new SequentialCommandGroup(
+            new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
+            , new CMD_IntakeMode(m_Intake)
+            , new CMD_IndexerForward(m_Indexer)
+            , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.INTAKE)))
+        .whenReleased(new SequentialCommandGroup(
+            new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
+            , new CMD_IntakeModeOff(m_Intake, m_Indexer)
+            , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
+        
+
+    m_Sensor
+        .and(new TRG_Subsystem(m_FSM_Robot, "INTAKE"))
+        .whenActive(new SequentialCommandGroup(
+            new CMD_SensorTest(m_Sensor)
+            , new CMD_IndexerBackOn(m_Indexer)))
+        .whenInactive(new SequentialCommandGroup(
+            new WaitCommand(0.5)
+            , new CMD_SensorTestRelease(m_Sensor)
+            , new CMD_IndexerBackOff(m_Indexer)));
   }
 
   /**
