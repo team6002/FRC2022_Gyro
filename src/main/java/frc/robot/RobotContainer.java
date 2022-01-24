@@ -6,7 +6,6 @@ package frc.robot;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.controller.PIDController;
@@ -143,8 +142,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whenPressed(new SequentialCommandGroup(
             new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
-            , new CMD_IntakeMode(m_Intake)
-            , new CMD_IndexerForward(m_Indexer)
+            , new CMD_IntakeMode(m_Intake, m_Indexer)
             , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.INTAKE)))
         .whenReleased(new SequentialCommandGroup(
             new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
