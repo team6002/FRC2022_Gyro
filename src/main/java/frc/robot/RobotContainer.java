@@ -39,6 +39,7 @@ public class RobotContainer {
   private final SUB_Shooter m_Shooter = new SUB_Shooter();
   private final DigitalSensor m_Sensor = new DigitalSensor(0);
   private final FSM_Robot m_FSM_Robot = new FSM_Robot();
+  private final SUB_Turret m_Turret = new SUB_Turret();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
