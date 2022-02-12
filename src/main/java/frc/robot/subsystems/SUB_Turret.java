@@ -21,6 +21,9 @@ public class SUB_Turret extends SubsystemBase{
     private double center = 80; //center of the camera (160x120)
     private boolean onTarget = false;
 
+    //ratio difference/center * the max voltage output = how much voltage to send the turret
+    public double sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
+
     //Network Table
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("Shooter");
@@ -53,8 +56,6 @@ public class SUB_Turret extends SubsystemBase{
         return readcX() - center;
     }
 
-    //ratio difference/center * the max voltage output = how much voltage to send the turret
-    public double sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
     public boolean isCentered() {
         if(diffFromCenter() == center) {
             onTarget = true;
@@ -67,6 +68,26 @@ public class SUB_Turret extends SubsystemBase{
         return onTarget;
     }
 
+
+    //hint left and right functions
+    //huntDirection(-1, 1)
+    //if -1: counter clock, 1: clock
+    //if hits limit switch, *-1
+
+    public int huntDirection = 1;
+    public void huntLeft() {
+        huntDirection = -1;
+    }
+
+    public void huntRight() {
+        huntDirection = 1;
+    }
+
+    public void hunt() {
+        m_Turret.setVoltage(TurretConstants.kTurretHuntVoltage * huntDirection);
+    }
+
+
     //Check to see if you can grab data from rasppi (E: yup)
     @Override
     public void periodic() {
@@ -78,5 +99,8 @@ public class SUB_Turret extends SubsystemBase{
         SmartDashboard.putNumber("cY", readcY());
         SmartDashboard.putNumber("Voltage", sentOutput);
         SmartDashboard.putNumber("Difference", diffFromCenter());
+
+        //soft limit forward = 51
+        //soft limit reverse = -7
     }
 }

@@ -70,28 +70,28 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whenPressed(() -> m_robotDrive.setMaxOutput(0.5))
-        .whenReleased(() -> m_robotDrive.setMaxOutput(1));
+    // new JoystickButton(m_driverController, Button.kRightBumper.value)
+    //     .whenPressed(() -> m_robotDrive.setMaxOutput(0.5))
+    //     .whenReleased(() -> m_robotDrive.setMaxOutput(1));
 
     // Stabilize robot to drive straight with gyro when left bumper is held
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
-        .whenHeld(
-            new PIDCommand(
-                new PIDController(
-                    DriveConstants.kStabilizationP,
-                    DriveConstants.kStabilizationI,
-                    DriveConstants.kStabilizationD),
-                // Close the loop on the turn rate
-                m_robotDrive::getTurnRate,
-                // Setpoint is 0
-                0,
-                // Pipe the output to the turning controls
-                output ->
-                    m_robotDrive.arcadeDrive(
-                        m_driverController.getLeftY(), output),
-                // Require the robot drive
-                m_robotDrive));
+    // new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    //     .whenHeld(
+    //         new PIDCommand(
+    //             new PIDController(
+    //                 DriveConstants.kStabilizationP,
+    //                 DriveConstants.kStabilizationI,
+    //                 DriveConstants.kStabilizationD),
+    //             // Close the loop on the turn rate
+    //             m_robotDrive::getTurnRate,
+    //             // Setpoint is 0
+    //             0,
+    //             // Pipe the output to the turning controls
+    //             output ->
+    //                 m_robotDrive.arcadeDrive(
+    //                     m_driverController.getLeftY(), output),
+    //             // Require the robot drive
+    //             m_robotDrive));
 
     // Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
     // new JoystickButton(m_driverController, Button.kX.value)
@@ -101,9 +101,9 @@ public class RobotContainer {
     // new JoystickButton(m_driverController, Button.kA.value)
     //     .whenPressed(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
     
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
-        .whenPressed(new CMD_DrivetrainSetHighGear(m_GearShift))
-        .whenReleased(new CMD_DrivetrainSetLowGear(m_GearShift));
+    // new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    //     .whenPressed(new CMD_DrivetrainSetHighGear(m_GearShift))
+    //     .whenReleased(new CMD_DrivetrainSetLowGear(m_GearShift));
         
     // //testing climb
     // new JoystickButton(m_driverController, Button.kB.value)
@@ -140,16 +140,22 @@ public class RobotContainer {
             , new CMD_IndexerOff(m_Indexer)
             , new CMD_ShooterOff(m_Shooter)));
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whenPressed(new SequentialCommandGroup(
-            new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
-            , new CMD_IntakeMode(m_Intake, m_Indexer)
-            , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.INTAKE)))
-        .whenReleased(new SequentialCommandGroup(
-            new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
-            , new CMD_IntakeModeOff(m_Intake, m_Indexer)
-            , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
+    // new JoystickButton(m_driverController, Button.kRightBumper.value)
+    //     .whenPressed(new SequentialCommandGroup(
+    //         new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
+    //         , new CMD_IntakeMode(m_Intake, m_Indexer)
+    //         , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.INTAKE)))
+    //     .whenReleased(new SequentialCommandGroup(
+    //         new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
+    //         , new CMD_IntakeModeOff(m_Intake, m_Indexer)
+    //         , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
         
+    //testing turret
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+        .whenPressed(new CMD_HuntRight(m_Turret));
+    
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+        .whenPressed(new CMD_HuntLeft(m_Turret));
 
     m_Sensor
         .and(new TRG_Subsystem(m_FSM_Robot, "INTAKE"))
