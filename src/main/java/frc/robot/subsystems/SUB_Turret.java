@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,14 +19,14 @@ public class SUB_Turret extends SubsystemBase{
 
     private double center = 80; //center of the camera (160x120)
     private boolean onTarget = false;
+    public int huntDirection = 1;
 
     //ratio difference/center * the max voltage output = how much voltage to send the turret
     public double sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
 
     //Network Table
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("Shooter");
-    NetworkTableEntry cXEntry, cYEntry;
+    NetworkTable table = inst.getTable("Turret");
 
     public SUB_Turret(){
         m_Turret.setIdleMode(IdleMode.kBrake);
@@ -42,11 +41,21 @@ public class SUB_Turret extends SubsystemBase{
     }
 
     //Reads from the network table
-    public double readcX(){
-        return table.getEntry("cX").getDouble(-1);
+    // double x = table.getEntry("cX").getDouble(-1);
+
+    public double readcX() { //doesn't work
+        double x = -1;
+        try {
+            x = table.getEntry("cX").getDouble(-1);
+        }
+        catch(Exception e) {
+            // code
+        }
+        
+        return x;
     }
 
-    public double readcY(){
+    public double readcY() {
         return table.getEntry("cY").getDouble(-1);
     }
 
@@ -57,50 +66,51 @@ public class SUB_Turret extends SubsystemBase{
     }
 
     public boolean isCentered() {
-        if(diffFromCenter() == center) {
+        if(Math.abs(diffFromCenter()) < 2) {
             onTarget = true;
-            m_Turret.setVoltage(0);
         }
         else {
             onTarget = false;
-            m_Turret.setVoltage(diffFromCenter() / center * TurretConstants.kTurretVoltage);
         }
+
         return onTarget;
     }
 
-
-    //hint left and right functions
-    //huntDirection(-1, 1)
-    //if -1: counter clock, 1: clock
-    //if hits limit switch, *-1
-
-    public int huntDirection = 1;
-    public void huntLeft() {
-        huntDirection = -1;
+    public void setHuntDirection(int dir) {
+        if(dir == 1) {
+            huntDirection = 1;
+        }
+        else {
+            huntDirection = -1;
+        }
     }
-
-    public void huntRight() {
-        huntDirection = 1;
-    }
-
-    public void hunt() {
-        m_Turret.setVoltage(TurretConstants.kTurretHuntVoltage * huntDirection);
-    }
-
 
     //Check to see if you can grab data from rasppi (E: yup)
     @Override
     public void periodic() {
-        sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
-        diffFromCenter();
-        isCentered();
+        double targetX = readcX();
+        double diffFromCenter = 0;
+        if(targetX == -1) {
+            //no target found
+            //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
+            diffFromCenter = -999;
+            sentOutput = huntDirection * TurretConstants.kTurretHuntVoltage;
+        }
+        else {
+            diffFromCenter = diffFromCenter();
+            sentOutput = diffFromCenter / center * TurretConstants.kTurretVoltage;
+        }
 
-        SmartDashboard.putNumber("cX", readcX());
-        SmartDashboard.putNumber("cY", readcY());
+        m_Turret.setVoltage(sentOutput);
+
+        SmartDashboard.putNumber("X", readcX());
+        SmartDashboard.putNumber("Y", readcY());
         SmartDashboard.putNumber("Voltage", sentOutput);
-        SmartDashboard.putNumber("Difference", diffFromCenter());
-
-        //soft limit forward = 51
-        //soft limit reverse = -7
+        SmartDashboard.putNumber("Difference", diffFromCenter);
+        SmartDashboard.putBoolean("Target?", onTarget);
+        SmartDashboard.putNumber("Hunting Direction", huntDirection);
     }
+
+    //soft limit forward = 51
+    //soft limit reverse = -7
 }

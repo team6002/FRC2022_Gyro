@@ -150,12 +150,6 @@ public class RobotContainer {
     //         , new CMD_IntakeModeOff(m_Intake, m_Indexer)
     //         , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
         
-    //testing turret
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whenPressed(new CMD_HuntRight(m_Turret));
-    
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
-        .whenPressed(new CMD_HuntLeft(m_Turret));
 
     m_Sensor
         .and(new TRG_Subsystem(m_FSM_Robot, "INTAKE"))
