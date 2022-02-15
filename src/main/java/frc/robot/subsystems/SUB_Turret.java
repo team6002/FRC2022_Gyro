@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 
 public class SUB_Turret extends SubsystemBase{
+    //motors, encoders, PID controller, limit switches
     private CANSparkMax m_Turret = new CANSparkMax(TurretConstants.kTurretMotor, MotorType.kBrushless);
     private final RelativeEncoder m_Encoder = m_Turret.getEncoder();
     private SparkMaxPIDController m_Controller = m_Turret.getPIDController();
@@ -46,16 +47,24 @@ public class SUB_Turret extends SubsystemBase{
         m_ReverseLimitSwitch.enableLimitSwitch(false);
     }
 
-    //Reads from the network table
-    // double x = table.getEntry("cX").getDouble(-1);
+    //sets the which way the turret should turn to find a target
+    public void setHuntDirection(int dir) {
+        if(dir == 1) {
+            huntDirection = 1;
+        }
+        else {
+            huntDirection = -1;
+        }
+    }
 
-    public double readcX() { //doesn't work
+    //Reads from the network table
+    public double readcX() { 
         double x = -1;
         try {
             x = table.getEntry("cX").getDouble(-1);
         }
         catch(Exception e) {
-            // code
+            
         }
         
         return x;
@@ -71,27 +80,6 @@ public class SUB_Turret extends SubsystemBase{
         return readcX() - center;
     }
 
-    public boolean isCentered() {
-        if(Math.abs(diffFromCenter()) < 2) {
-            onTarget = true;
-        }
-        else {
-            onTarget = false;
-        }
-
-        return onTarget;
-    }
-
-    public void setHuntDirection(int dir) {
-        if(dir == 1) {
-            huntDirection = 1;
-        }
-        else {
-            huntDirection = -1;
-        }
-    }
-
-    //Check to see if you can grab data from rasppi (E: yup)
     @Override
     public void periodic() {
         double targetX = readcX();
@@ -105,7 +93,7 @@ public class SUB_Turret extends SubsystemBase{
             else if(m_ReverseLimitSwitch.isPressed() == true) {
                 setHuntDirection(-1);
             }
-            
+
             diffFromCenter = -999;
             sentOutput = huntDirection * TurretConstants.kTurretHuntVoltage;
         }
@@ -116,6 +104,7 @@ public class SUB_Turret extends SubsystemBase{
 
         m_Turret.setVoltage(sentOutput);
 
+        //Shuffleboard Output
         SmartDashboard.putNumber("X", readcX());
         SmartDashboard.putNumber("Y", readcY());
         SmartDashboard.putNumber("Voltage", sentOutput);

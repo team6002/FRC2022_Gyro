@@ -55,11 +55,12 @@ public final class Constants {
   }
 
   public static final class IndexerConstants {
-    //indexer
+    //indexer motors
     public static final int kIndexerTop = 10;
     public static final int kIndexerBottom = 4;
     public static final int kIndexerBack = 18;
 
+    //indexer speeds
     public static final double kIndexerFSpeed = 0.5;
     public static final double kIndexerRSpeed = -0.3;
   }
@@ -69,11 +70,13 @@ public final class Constants {
     public static final int kShooterMaster = 2;
     public static final int kShooterSlave = 3;
 
+    //shooter PID
     public static final double kShooterFF = 0.000180; //Danny's numbers
     public static final double kShooterP = 0.00068;
     public static final double kShooterI = 0; 
     public static final double kShooterD = 0.00000750;
 
+    //shooter speeds
     public static final double kShootingVelocity = 2200;
     public static final double kShootingAccel = 1000;
 
@@ -87,11 +90,13 @@ public final class Constants {
     //turret
     public static final int kTurretMotor = 5;
 
+    //turret PID
     public static final double kTurretFF = 0;
     public static final double kTurretP = 0.0049;
     public static final double kTurretI = 0.00003;
     public static final double kTurretD = 0.00003;
 
+    //turret speeds
     public static final double kMinTurretOutput = -1;
     public static final double kMaxTurretOutput = 1;
 

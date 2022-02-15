@@ -9,12 +9,15 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.ShooterConstants;
 
 public class SUB_Shooter {
+    //motors
     private CANSparkMax m_ShooterMaster = new CANSparkMax(ShooterConstants.kShooterMaster, MotorType.kBrushless);
     private CANSparkMax m_ShooterSlave = new CANSparkMax(ShooterConstants.kShooterSlave, MotorType.kBrushless);
 
+    //encoders
     private RelativeEncoder m_ShooterMasterEncoder = m_ShooterMaster.getEncoder();
     private RelativeEncoder m_ShooterSlaveEncoder = m_ShooterSlave.getEncoder();
 
+    //PID controller
     private SparkMaxPIDController m_Controller = m_ShooterMaster.getPIDController();
 
     public SUB_Shooter()
@@ -37,26 +40,31 @@ public class SUB_Shooter {
         m_Controller.setSmartMotionMaxAccel(ShooterConstants.kShootingAccel, 0);
     }
 
+    //turns on shooter
     public void shooterOn()
     {
         m_ShooterMaster.set(ShooterConstants.kShooterSpeed);
     }
 
+    //turns off shooter
     public void shooterOff()
     {
         m_ShooterMaster.set(0);
     }
 
+    //gets the shooter up to speed
     public void readyShooter()
     {
         m_Controller.setReference(ShooterConstants.kShootingVelocity, CANSparkMax.ControlType.kVelocity);
     }
 
+    //checks if the shooter is ready to shoot
     public boolean isReady(double setpoint, double epsilon)
     {
         return (getVelocity() - epsilon <= setpoint) && (getVelocity() + epsilon >= setpoint);
     }
 
+    //gets velocity of shooter
     public double getVelocity()
     {
         return m_ShooterMasterEncoder.getVelocity();
