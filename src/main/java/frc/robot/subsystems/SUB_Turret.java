@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -16,6 +17,8 @@ public class SUB_Turret extends SubsystemBase{
     private CANSparkMax m_Turret = new CANSparkMax(TurretConstants.kTurretMotor, MotorType.kBrushless);
     private final RelativeEncoder m_Encoder = m_Turret.getEncoder();
     private SparkMaxPIDController m_Controller = m_Turret.getPIDController();
+    private SparkMaxLimitSwitch m_ForwardLimitSwitch = m_Turret.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    private SparkMaxLimitSwitch m_ReverseLimitSwitch = m_Turret.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
     private double center = 80; //center of the camera (160x120)
     private boolean onTarget = false;
@@ -38,6 +41,9 @@ public class SUB_Turret extends SubsystemBase{
         m_Controller.setD(TurretConstants.kTurretD);
 
         m_Controller.setOutputRange(TurretConstants.kMinTurretOutput, TurretConstants.kMaxTurretOutput);
+
+        m_ForwardLimitSwitch.enableLimitSwitch(false);
+        m_ReverseLimitSwitch.enableLimitSwitch(false);
     }
 
     //Reads from the network table
@@ -93,6 +99,13 @@ public class SUB_Turret extends SubsystemBase{
         if(targetX == -1) {
             //no target found
             //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
+            if(m_ForwardLimitSwitch.isPressed() == true) {
+                setHuntDirection(1);
+            }
+            else if(m_ReverseLimitSwitch.isPressed() == true) {
+                setHuntDirection(-1);
+            }
+            
             diffFromCenter = -999;
             sentOutput = huntDirection * TurretConstants.kTurretHuntVoltage;
         }
@@ -109,6 +122,8 @@ public class SUB_Turret extends SubsystemBase{
         SmartDashboard.putNumber("Difference", diffFromCenter);
         SmartDashboard.putBoolean("Target?", onTarget);
         SmartDashboard.putNumber("Hunting Direction", huntDirection);
+        SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
+        SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
     }
 
     //soft limit forward = 51
