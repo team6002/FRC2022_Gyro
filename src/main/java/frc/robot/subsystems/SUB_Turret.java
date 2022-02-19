@@ -115,6 +115,6 @@ public class SUB_Turret extends SubsystemBase{
         SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
     }
 
-    //soft limit forward = 51
-    //soft limit reverse = -7
+    //soft limit forward = 43
+    //soft limit reverse = -16
 }

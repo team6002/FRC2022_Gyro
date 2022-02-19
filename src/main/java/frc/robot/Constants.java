@@ -92,15 +92,15 @@ public final class Constants {
 
     //turret PID
     public static final double kTurretFF = 0;
-    public static final double kTurretP = 0.0049;
-    public static final double kTurretI = 0.00003;
-    public static final double kTurretD = 0.00003;
+    public static final double kTurretP = 0.0005;
+    public static final double kTurretI = 0.00000;
+    public static final double kTurretD = 0.00000;
 
     //turret speeds
     public static final double kMinTurretOutput = -1;
     public static final double kMaxTurretOutput = 1;
 
     public static final double kTurretVoltage = 10;
-    public static final double kTurretHuntVoltage = 1;
+    public static final double kTurretHuntVoltage = 3;
   }
 }

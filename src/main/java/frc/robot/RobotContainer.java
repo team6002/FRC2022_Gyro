@@ -140,15 +140,15 @@ public class RobotContainer {
             , new CMD_IndexerOff(m_Indexer)
             , new CMD_ShooterOff(m_Shooter)));
 
-    // new JoystickButton(m_driverController, Button.kRightBumper.value)
-    //     .whenPressed(new SequentialCommandGroup(
-    //         new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
-    //         , new CMD_IntakeMode(m_Intake, m_Indexer)
-    //         , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.INTAKE)))
-    //     .whenReleased(new SequentialCommandGroup(
-    //         new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
-    //         , new CMD_IntakeModeOff(m_Intake, m_Indexer)
-    //         , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+        .whenPressed(new SequentialCommandGroup(
+            new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
+            , new CMD_IntakeMode(m_Intake, m_Indexer)
+            , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.INTAKE)))
+        .whenReleased(new SequentialCommandGroup(
+            new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
+            , new CMD_IntakeModeOff(m_Intake, m_Indexer)
+            , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
         
 
     m_Sensor
