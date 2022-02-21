@@ -26,7 +26,7 @@ public class SUB_Turret extends SubsystemBase{
     public int huntDirection = 1;
 
     //ratio difference/center * the max voltage output = how much voltage to send the turret
-    public double sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
+    // public double sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
 
     //Network Table
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -84,6 +84,7 @@ public class SUB_Turret extends SubsystemBase{
     public void periodic() {
         double targetX = readcX();
         double diffFromCenter = 0;
+        double sentOutput = 0;
         if(targetX == -1) {
             //no target found
             //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
@@ -100,6 +101,14 @@ public class SUB_Turret extends SubsystemBase{
         else {
             diffFromCenter = diffFromCenter();
             sentOutput = diffFromCenter / center * TurretConstants.kTurretVoltage;
+            if(m_ForwardLimitSwitch.isPressed() == true && sentOutput < 0)
+            {
+                sentOutput = 0;
+            }
+            else if(m_ReverseLimitSwitch.isPressed() == true && sentOutput > 0)
+            {
+                sentOutput = 0;
+            }
         }
 
         m_Turret.setVoltage(sentOutput);
