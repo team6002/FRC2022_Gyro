@@ -100,36 +100,6 @@ public class RobotContainer {
     // Turn to -90 degrees with a profile when the 'A' button is pressed, with a 5 second timeout
     // new JoystickButton(m_driverController, Button.kA.value)
     //     .whenPressed(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
-    
-    // new JoystickButton(m_driverController, Button.kLeftBumper.value)
-    //     .whenPressed(new CMD_DrivetrainSetHighGear(m_GearShift))
-    //     .whenReleased(new CMD_DrivetrainSetLowGear(m_GearShift));
-        
-    // //testing climb
-    // new JoystickButton(m_driverController, Button.kB.value)
-    //     .whenPressed(new SequentialCommandGroup(new CMD_ReleaseWinchRatchet(m_Climb), new CMD_ClimbUp(m_Climb)))
-    //     .whenReleased(new CMD_ClimbDown(m_Climb));
-
-    // //testing intake
-    // new JoystickButton(m_driverController, Button.kRightBumper.value)
-    //     .whenPressed(new CMD_DeployIntake(m_Intake))
-    //     .whenReleased(new CMD_RetractIntake(m_Intake));
-    // new JoystickButton(m_driverController, Button.kY.value) 
-    //     .whenPressed(new CMD_IntakeForward(m_Intake));
-    // new JoystickButton(m_driverController, Button.kA.value)
-    //     .whenPressed(new CMD_IntakeReverse(m_Intake));
-    // new JoystickButton(m_driverController, Button.kX.value)
-    //     .whenPressed(new CMD_IntakeOff(m_Intake));
-
-    //testing indexer
-    new JoystickButton(m_driverController, Button.kA.value)
-        .whenPressed(new CMD_IndexerForward(m_Indexer))
-        .whenReleased(new CMD_IndexerOff(m_Indexer));
-    // new JoystickButton(m_driverController, Button.kB.value)
-    //     .whenPressed(new CMD_IndexerReverse(m_Indexer))
-    //     .whenReleased(new CMD_IndexerOff(m_Indexer));
-    // new JoystickButton(m_driverController, Button.kY.value)
-    //     .whenPressed(new CMD_IndexerOff(m_Indexer));
 
     //testing intake mode
     new JoystickButton(m_driverController, Button.kX.value)
@@ -150,7 +120,6 @@ public class RobotContainer {
             , new CMD_IntakeModeOff(m_Intake, m_Indexer)
             , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
         
-
     m_Sensor
         .and(new TRG_Subsystem(m_FSM_Robot, "INTAKE"))
         .whenActive(new SequentialCommandGroup(
