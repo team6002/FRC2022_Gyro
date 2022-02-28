@@ -26,7 +26,7 @@ public class SUB_Turret extends SubsystemBase{
     public int huntDirection = 1;
 
     //ratio difference/center * the max voltage output = how much voltage to send the turret
-    // public double sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
+    //public double sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
 
     //Network Table
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
