@@ -25,9 +25,6 @@ public class SUB_Turret extends SubsystemBase{
     private boolean onTarget = false;
     public int huntDirection = 1;
 
-    //ratio difference/center * the max voltage output = how much voltage to send the turret
-    //public double sentOutput = diffFromCenter() / center * TurretConstants.kTurretVoltage;
-
     //Network Table
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("Turret");
@@ -45,8 +42,28 @@ public class SUB_Turret extends SubsystemBase{
 
         m_ForwardLimitSwitch.enableLimitSwitch(false);
         m_ReverseLimitSwitch.enableLimitSwitch(false);
+
+        //testing encoders (figure out converstion factor on real robo)
+        // m_Encoder.setPositionConversionFactor((2.0 * Math.PI * 0.0381)/6.0);
     }
 
+    //TODO LIST:
+    //30:1 gear ratio, convert 0-1 encoder to 0-360 degrees (constant = 12)
+    //one limit switch is 0, home to 0 if encoders are wacked
+    //buttons to home to front/back intake and side of robo
+    //invert encoder
+
+    public void turretReset() {
+        if(m_ReverseLimitSwitch.isPressed() == true) {
+            m_Encoder.setPosition(0);
+        }
+    }
+
+    //2020 robot positions
+    private final double FRONT_POSITION = -0.464;
+    private final double BACK_POSITION = -1.806;
+    private final double SIDE_POSITION = -1.129;
+    
     //sets the which way the turret should turn to find a target
     public void setHuntDirection(int dir) {
         if(dir == 1) {
@@ -82,35 +99,42 @@ public class SUB_Turret extends SubsystemBase{
 
     @Override
     public void periodic() {
+        turretReset();
         double targetX = readcX();
         double diffFromCenter = 0;
         double sentOutput = 0;
-        if(targetX == -1) {
-            //no target found
-            //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
-            if(m_ForwardLimitSwitch.isPressed() == true) {
-                setHuntDirection(1);
-            }
-            else if(m_ReverseLimitSwitch.isPressed() == true) {
-                setHuntDirection(-1);
-            }
+        // if(targetX == -1) {
+        //     //no target found
+        //     //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
+        //     if(m_ForwardLimitSwitch.isPressed() == true) {
+        //         setHuntDirection(1);
+        //     }
+        //     else if(m_ReverseLimitSwitch.isPressed() == true) {
+        //         setHuntDirection(-1);
+        //     }
 
-            diffFromCenter = -999;
-            sentOutput = huntDirection * TurretConstants.kTurretHuntVoltage;
+        //     diffFromCenter = -999;
+        //     sentOutput = huntDirection * TurretConstants.kTurretHuntVoltage;
+        // }
+        // else {
+        //     diffFromCenter = diffFromCenter();
+        //     sentOutput = diffFromCenter / center * TurretConstants.kTurretVoltage;
+        //     if(m_ForwardLimitSwitch.isPressed() == true && sentOutput < 0)
+        //     {
+        //         sentOutput = 0;
+        //     }
+        //     else if(m_ReverseLimitSwitch.isPressed() == true && sentOutput > 0)
+        //     {
+        //         sentOutput = 0;
+        //     }
+        // }
+        
+        if(m_ForwardLimitSwitch.isPressed() == true && sentOutput < 0) {
+            sentOutput = 0;
         }
-        else {
-            diffFromCenter = diffFromCenter();
-            sentOutput = diffFromCenter / center * TurretConstants.kTurretVoltage;
-            if(m_ForwardLimitSwitch.isPressed() == true && sentOutput < 0)
-            {
-                sentOutput = 0;
-            }
-            else if(m_ReverseLimitSwitch.isPressed() == true && sentOutput > 0)
-            {
-                sentOutput = 0;
-            }
+        else if(m_ReverseLimitSwitch.isPressed() == true && sentOutput > 0) {
+            sentOutput = 0;
         }
-
         m_Turret.setVoltage(sentOutput);
 
         //Shuffleboard Output
@@ -122,6 +146,9 @@ public class SUB_Turret extends SubsystemBase{
         SmartDashboard.putNumber("Hunting Direction", huntDirection);
         SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
+        
+        //testing
+        SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
     }
 
     //soft limit forward = 43
