@@ -102,13 +102,13 @@ public class RobotContainer {
     //     .whenPressed(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
 
     //testing intake mode
-    new JoystickButton(m_driverController, Button.kX.value)
-        .whenPressed(new SequentialCommandGroup(
-            new CMD_ShooterReady(m_Shooter)
-            , new CMD_FeedShooter(m_Indexer)
-            , new WaitCommand(1)
-            , new CMD_IndexerOff(m_Indexer)
-            , new CMD_ShooterOff(m_Shooter)));
+    // new JoystickButton(m_driverController, Button.kX.value)
+    //     .whenPressed(new SequentialCommandGroup(
+    //         new CMD_ShooterReady(m_Shooter)
+    //         , new CMD_FeedShooter(m_Indexer)
+    //         , new WaitCommand(1)
+    //         , new CMD_IndexerOff(m_Indexer)
+    //         , new CMD_ShooterOff(m_Shooter)));
 
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whenPressed(new SequentialCommandGroup(
@@ -130,6 +130,18 @@ public class RobotContainer {
             , new CMD_SensorTestRelease(m_Sensor)
             , new CMD_IndexerBackOff(m_Indexer)));
     
+    //testing turret
+    new JoystickButton(m_driverController, Button.kY.value)
+        .whenPressed(new CMD_FrontTurret(m_Turret));
+
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whenPressed(new CMD_BackTurret(m_Turret));
+
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whenPressed(new CMD_SideTurret(m_Turret));
+    
+    new JoystickButton(m_driverController, Button.kX.value)
+        .whenPressed(new CMD_TurretMode(m_Turret));
   }
 
   /**
