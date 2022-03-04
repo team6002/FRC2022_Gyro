@@ -6,8 +6,6 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -23,9 +21,6 @@ public class SUB_Shooter extends SubsystemBase{
 
     //PID controller
     private SparkMaxPIDController m_Controller = m_ShooterMaster.getPIDController();
-
-    //alliance color
-    private String allianceColor = "RED"; 
 
     public SUB_Shooter()
     {
@@ -77,22 +72,8 @@ public class SUB_Shooter extends SubsystemBase{
         return m_ShooterMasterEncoder.getVelocity();
     }
 
-    //sets alliance color
-    public void setAllianceColor(String color) {
-        allianceColor = color;
-    }
-    
-    //gets the alliance color
-    public String getAllianceColor() {
-        return allianceColor;
-    }
-
     @Override
     public void periodic() {
-        String wantedAllianceColor = SmartDashboard.getString("Alliance Color", allianceColor);
-        if(allianceColor != wantedAllianceColor) {
-            allianceColor = wantedAllianceColor;
-        }
         
     }
 }

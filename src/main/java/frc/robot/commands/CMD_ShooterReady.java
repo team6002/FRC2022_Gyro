@@ -6,7 +6,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.SUB_Shooter;
 
 public class CMD_ShooterReady extends CommandBase{
-    SUB_Shooter m_Shooter;
+    private SUB_Shooter m_Shooter;
 
     public CMD_ShooterReady(SUB_Shooter p_Shooter)
     {

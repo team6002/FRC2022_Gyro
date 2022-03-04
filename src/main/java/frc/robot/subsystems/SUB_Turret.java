@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
@@ -29,6 +30,14 @@ public class SUB_Turret extends SubsystemBase{
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("Turret");
 
+    //alliance color picker variable
+    String RED;
+    String BLUE;
+    String Color;
+    SendableChooser<String> m_color = new SendableChooser<>();
+
+    SUB_colorSensor m_colorSensor = new SUB_colorSensor();
+
     public SUB_Turret(){
         m_Turret.setIdleMode(IdleMode.kBrake);
         m_Turret.setInverted(true);
@@ -45,13 +54,12 @@ public class SUB_Turret extends SubsystemBase{
 
         //testing encoders (figure out converstion factor on real robo)
         // m_Encoder.setPositionConversionFactor((2.0 * Math.PI * 0.0381)/6.0);
-    }
 
-    //TODO LIST:
-    //30:1 gear ratio, convert 0-1 encoder to 0-360 degrees (constant = 12)
-    //one limit switch is 0, home to 0 if encoders are wacked
-    //buttons to home to front/back intake and side of robo
-    //invert encoder
+        //add options to sendable chooser
+        m_color.addOption("RED", RED);
+        m_color.addOption("BLUE", BLUE);
+        SmartDashboard.putData("Alliance", m_color);
+    }
 
     public void turretReset() {
         if(m_ReverseLimitSwitch.isPressed() == true) {
@@ -125,12 +133,42 @@ public class SUB_Turret extends SubsystemBase{
         return readcX() - center;
     }
 
+    //shooter ball color alliance thangy
+
+    //checks if the alliance color is red or blue
+    public boolean checkChooser(){
+        if (Color == RED){
+            return true;
+        } else return false;
+    }
+
+    //check ball color **DO NOT USE COLOR SENSOR**
+    public boolean correctBall() {
+        if(m_colorSensor.getColor() == Color && m_colorSensor.getColor() != "unknown")
+        {
+            return true;
+        } else return false;
+    }
+
+    private int OFFSET = 0;
+
     @Override
     public void periodic() {
         turretReset();
         double targetX = readcX();
         double diffFromCenter = 0;
         double sentOutput = 0;
+
+        Color = m_color.getSelected();
+        SmartDashboard.putBoolean("RED???", checkChooser());
+        checkChooser();
+
+        if(correctBall()) {
+            OFFSET = 0;
+        } else {
+            OFFSET = 40;
+        }
+
         if(turretMode == 0) {
             if(targetX == -1) {
                 //no target found
@@ -177,6 +215,9 @@ public class SUB_Turret extends SubsystemBase{
         // SmartDashboard.putNumber("Hunting Direction", huntDirection);
         SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
+        SmartDashboard.putNumber("OFFSET", OFFSET);
+        SmartDashboard.putNumber("CENTER", center);
+        SmartDashboard.putBoolean("Correct Ball", correctBall());
         
         //testing
         SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());

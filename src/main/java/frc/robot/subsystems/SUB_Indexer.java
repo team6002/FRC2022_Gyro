@@ -11,7 +11,6 @@ public class SUB_Indexer {
     private CANSparkMax m_IndexerBack = new CANSparkMax(IndexerConstants.kIndexerBack, MotorType.kBrushless);
 
     public SUB_Indexer(){
-        System.out.println("invert indexer");
         m_IndexerBottom.setInverted(true);
         m_IndexerTop.setInverted(true);
         m_IndexerBack.setInverted(true);

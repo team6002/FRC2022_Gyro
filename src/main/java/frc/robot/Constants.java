@@ -101,6 +101,6 @@ public final class Constants {
     public static final double kMaxTurretOutput = 1;
 
     public static final double kTurretVoltage = 5;
-    public static final double kTurretHuntVoltage = 3;
+    public static final double kTurretHuntVoltage = 2;
   }
 }
