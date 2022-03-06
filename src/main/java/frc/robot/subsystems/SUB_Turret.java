@@ -31,12 +31,10 @@ public class SUB_Turret extends SubsystemBase{
     NetworkTable table = inst.getTable("Turret");
 
     //alliance color picker variable
-    String RED;
-    String BLUE;
-    String Color;
+    String RED = "RED";
+    String BLUE = "BLUE";
+    String bColor = "YOSHI";
     SendableChooser<String> m_color = new SendableChooser<>();
-
-    SUB_colorSensor m_colorSensor = new SUB_colorSensor();
 
     public SUB_Turret(){
         m_Turret.setIdleMode(IdleMode.kBrake);
@@ -58,7 +56,8 @@ public class SUB_Turret extends SubsystemBase{
         //add options to sendable chooser
         m_color.addOption("RED", RED);
         m_color.addOption("BLUE", BLUE);
-        SmartDashboard.putData("Alliance", m_color);
+        m_color.setDefaultOption("RED", RED);
+        SmartDashboard.putData("chooser", m_color);
     }
 
     public void turretReset() {
@@ -90,8 +89,7 @@ public class SUB_Turret extends SubsystemBase{
     public void setTurretMode(int wantedMode) {
         if(wantedMode == 1) {
             turretMode = wantedMode;
-        }
-        else {
+        } else {
             turretMode = 0;
         }
     }
@@ -130,46 +128,56 @@ public class SUB_Turret extends SubsystemBase{
     //calculate how far the target is from center
     //right is negative, left is positive
     public double diffFromCenter() {
-        return readcX() - center;
+        return readcX() - (center + OFFSET);
     }
 
     //shooter ball color alliance thangy
 
+    private boolean redBall = true;
+    public void setBallColor(boolean col){
+        redBall = col; 
+    }
+
     //checks if the alliance color is red or blue
     public boolean checkChooser(){
-        if (Color == RED){
+        if (bColor == "RED"){
             return true;
         } else return false;
     }
 
     //check ball color **DO NOT USE COLOR SENSOR**
-    public boolean correctBall() {
-        if(m_colorSensor.getColor() == Color && m_colorSensor.getColor() != "unknown")
-        {
-            return true;
-        } else return false;
-    }
+    // public boolean correctBall() {
+    //     if(m_colorSensor.getColor() == Color && m_colorSensor.getColor() != "unknown")
+    //     {
+    //         return true;
+    //     } else return false;
+    // }
 
+    //set offset
     private int OFFSET = 0;
+    public void setOffset(){
+        OFFSET = 40;
+    }
 
     @Override
     public void periodic() {
         turretReset();
         double targetX = readcX();
-        double diffFromCenter = 0;
         double sentOutput = 0;
+        double diffFromCenter = 0;
 
-        Color = m_color.getSelected();
-        SmartDashboard.putBoolean("RED???", checkChooser());
-        checkChooser();
-
-        if(correctBall()) {
-            OFFSET = 0;
+        if(redBall != checkChooser()) {
+            setOffset();
         } else {
-            OFFSET = 40;
+            OFFSET = 0;
         }
 
+        SmartDashboard.putBoolean("checkChooser", checkChooser());
+        SmartDashboard.putString("ballcolor", bColor);
+        bColor = m_color.getSelected();
+
         if(turretMode == 0) {
+            targetPosition = 0;
             if(targetX == -1) {
                 //no target found
                 //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
@@ -178,6 +186,7 @@ public class SUB_Turret extends SubsystemBase{
                 }
                 else if(m_ReverseLimitSwitch.isPressed() == true) {
                     setHuntDirection(-1);
+                    turretReset();
                 }
     
                 diffFromCenter = -999;
@@ -193,33 +202,41 @@ public class SUB_Turret extends SubsystemBase{
                 else if(m_ReverseLimitSwitch.isPressed() == true && sentOutput > 0)
                 {
                     sentOutput = 0;
+                    turretReset();
                 }
             }
         }
         else {
-            sentOutput = (m_Encoder.getPosition() - targetPosition) / -57.500 * TurretConstants.kTurretHuntVoltage;
+            sentOutput = (m_Encoder.getPosition() - targetPosition) / -30* TurretConstants.kTurretMannualVoltage;
 
             if(sentOutput > 1) {
                 sentOutput = TurretConstants.kTurretHuntVoltage;
             }
+
+            if(m_ForwardLimitSwitch.isPressed() == true && sentOutput < 0)
+            {
+                sentOutput = 0;
+            }
+            else if(m_ReverseLimitSwitch.isPressed() == true && sentOutput > 0)
+            {
+                sentOutput = 0;
+                turretReset();
+            }
         }
 
+        
         m_Turret.setVoltage(sentOutput);
 
         //Shuffleboard Output
         SmartDashboard.putNumber("X", readcX());
         SmartDashboard.putNumber("Y", readcY());
-        // SmartDashboard.putNumber("Voltage", sentOutput);
-        // SmartDashboard.putNumber("Difference", diffFromCenter);
-        // SmartDashboard.putBoolean("Target?", onTarget);
-        // SmartDashboard.putNumber("Hunting Direction", huntDirection);
+        SmartDashboard.putNumber("Voltage", sentOutput);
+        SmartDashboard.putNumber("Difference", diffFromCenter);
+        SmartDashboard.putBoolean("Target?", onTarget);
+        SmartDashboard.putNumber("Hunting Direction", huntDirection);
         SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
-        SmartDashboard.putNumber("OFFSET", OFFSET);
-        SmartDashboard.putNumber("CENTER", center);
-        SmartDashboard.putBoolean("Correct Ball", correctBall());
-        
-        //testing
+        SmartDashboard.putBoolean("Ball color???", redBall);
         SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
         SmartDashboard.putNumber("Target Encoder", targetPosition);
         SmartDashboard.putNumber("Turret Mode", turretMode);

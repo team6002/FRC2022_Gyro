@@ -54,7 +54,7 @@ public class SUB_colorSensor extends SubsystemBase
     @Override
     public void periodic()
     {
-         SmartDashboard.putString("Detected Color", colorString);
+        //  SmartDashboard.putString("Detected Color", colorString);
          detectedColor();
     }
     

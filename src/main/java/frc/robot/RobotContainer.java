@@ -8,6 +8,7 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -45,6 +46,21 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+  public double yValue() {
+        if(Math.abs(m_driverController.getLeftY()) > 0.2) {
+            return m_driverController.getLeftY();
+        } else {
+            return 0;
+        }
+  }
+   public double xValue() {
+        if(Math.abs(m_driverController.getRightX()) > 0.1) {
+            return -m_driverController.getRightX();
+        } else {
+            return 0;
+        } 
+   }
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -58,9 +74,16 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 m_robotDrive.arcadeDrive(
-                    m_driverController.getLeftY(),
-                    -m_driverController.getRightX()),
+                    yValue(),
+                    xValue()),
             m_robotDrive));
+  }
+
+  public void outputX() {
+      SmartDashboard.putNumber("X-axis", xValue());
+  }
+  public void outputY() {
+      SmartDashboard.putNumber("Y-axis", yValue());
   }
 
   /**
@@ -111,15 +134,15 @@ public class RobotContainer {
     //         , new CMD_IndexerOff(m_Indexer)
     //         , new CMD_ShooterOff(m_Shooter)));
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whenPressed(new SequentialCommandGroup(
-            new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
-            , new CMD_IntakeMode(m_Intake, m_Indexer)
-            , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.INTAKE)))
-        .whenReleased(new SequentialCommandGroup(
-            new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
-            , new CMD_IntakeModeOff(m_Intake, m_Indexer)
-            , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
+    // new JoystickButton(m_driverController, Button.kRightBumper.value)
+    //     .whenPressed(new SequentialCommandGroup(
+    //         new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
+    //         , new CMD_IntakeMode(m_Intake, m_Indexer)
+    //         , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.INTAKE)))
+    //     .whenReleased(new SequentialCommandGroup(
+    //         new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.TRANSITIONING)
+    //         , new CMD_IntakeModeOff(m_Intake, m_Indexer)
+    //         , new CMD_SetRobotState(m_FSM_Robot, FSM_Robot.State.HOME)));
         
     m_Sensor
         .and(new TRG_Subsystem(m_FSM_Robot, "INTAKE"))
@@ -143,6 +166,12 @@ public class RobotContainer {
     
     new JoystickButton(m_driverController, Button.kX.value)
         .whenPressed(new CMD_TurretMode(m_Turret));
+    
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+        .whenPressed(new CMD_BlueBall(m_Turret));
+        
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+        .whenPressed(new CMD_RedBall(m_Turret));
   }
 
   /**
