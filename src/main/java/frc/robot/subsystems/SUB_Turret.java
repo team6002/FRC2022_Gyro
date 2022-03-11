@@ -166,15 +166,15 @@ public class SUB_Turret extends SubsystemBase{
         double sentOutput = 0;
         double diffFromCenter = 0;
 
-        if(redBall != checkChooser()) {
-            setOffset();
-        } else {
-            OFFSET = 0;
-        }
+        // if(redBall != checkChooser()) {
+        //     setOffset();
+        // } else {
+        //     OFFSET = 0;
+        // }
 
-        SmartDashboard.putBoolean("checkChooser", checkChooser());
-        SmartDashboard.putString("ballcolor", bColor);
-        bColor = m_color.getSelected();
+        // SmartDashboard.putBoolean("checkChooser", checkChooser());
+        // SmartDashboard.putString("ballcolor", bColor);
+        // bColor = m_color.getSelected();
 
         if(turretMode == 0) {
             targetPosition = 0;
