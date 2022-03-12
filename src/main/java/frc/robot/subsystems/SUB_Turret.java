@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,7 +37,12 @@ public class SUB_Turret extends SubsystemBase{
     String bColor = "YOSHI";
     SendableChooser<String> m_color = new SendableChooser<>();
 
-    public SUB_Turret(){
+    //joystick
+    XboxController joystick;
+
+    public SUB_Turret(XboxController p_joystick){
+        joystick = p_joystick;
+
         m_Turret.setIdleMode(IdleMode.kBrake);
         m_Turret.setInverted(true);
 
@@ -68,7 +74,7 @@ public class SUB_Turret extends SubsystemBase{
 
     //2020 robot positions
     private double targetPosition = 0;
-    private int turretMode = 0;
+    private int turretMode = 2;
 
     public void setFrontPosition() {
         targetPosition = -11.857;
@@ -186,7 +192,6 @@ public class SUB_Turret extends SubsystemBase{
                 }
                 else if(m_ReverseLimitSwitch.isPressed() == true) {
                     setHuntDirection(-1);
-                    turretReset();
                 }
     
                 diffFromCenter = -999;
@@ -202,11 +207,10 @@ public class SUB_Turret extends SubsystemBase{
                 else if(m_ReverseLimitSwitch.isPressed() == true && sentOutput > 0)
                 {
                     sentOutput = 0;
-                    turretReset();
                 }
             }
         }
-        else {
+        else if (turretMode == 1){ //manual position
             sentOutput = (m_Encoder.getPosition() - targetPosition) / -30* TurretConstants.kTurretMannualVoltage;
 
             if(sentOutput > 1) {
@@ -220,26 +224,31 @@ public class SUB_Turret extends SubsystemBase{
             else if(m_ReverseLimitSwitch.isPressed() == true && sentOutput > 0)
             {
                 sentOutput = 0;
-                turretReset();
             }
+        }
+        else if(turretMode == 2) { //manual move
+            double xVal = joystick.getLeftX();
+            sentOutput = xVal * TurretConstants.kTurretJoystickVoltage;
         }
 
         
         m_Turret.setVoltage(sentOutput);
 
         //Shuffleboard Output
-        SmartDashboard.putNumber("X", readcX());
-        SmartDashboard.putNumber("Y", readcY());
+        // SmartDashboard.putNumber("X", readcX());
+        // SmartDashboard.putNumber("Y", readcY());
         SmartDashboard.putNumber("Voltage", sentOutput);
-        SmartDashboard.putNumber("Difference", diffFromCenter);
-        SmartDashboard.putBoolean("Target?", onTarget);
-        SmartDashboard.putNumber("Hunting Direction", huntDirection);
-        SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
-        SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
-        SmartDashboard.putBoolean("Ball color???", redBall);
-        SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
-        SmartDashboard.putNumber("Target Encoder", targetPosition);
-        SmartDashboard.putNumber("Turret Mode", turretMode);
+        // SmartDashboard.putNumber("Difference", diffFromCenter);
+        // SmartDashboard.putBoolean("Target?", onTarget);
+        // SmartDashboard.putNumber("Hunting Direction", huntDirection);
+        // SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
+        // SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
+        // SmartDashboard.putBoolean("Ball color???", redBall);
+        // SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
+        // SmartDashboard.putNumber("Target Encoder", targetPosition);
+        // SmartDashboard.putNumber("Turret Mode", turretMode);
+
+
     }
 
     //soft limit forward = 43

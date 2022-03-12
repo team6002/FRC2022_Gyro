@@ -31,6 +31,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    // The driver's controller
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final SUB_GearShift m_GearShift = new SUB_GearShift();
@@ -40,11 +43,8 @@ public class RobotContainer {
   private final SUB_Shooter m_Shooter = new SUB_Shooter();
   private final DigitalSensor m_Sensor = new DigitalSensor(0);
   private final FSM_Robot m_FSM_Robot = new FSM_Robot();
-  private final SUB_Turret m_Turret = new SUB_Turret();
+  private final SUB_Turret m_Turret = new SUB_Turret(m_driverController);
   private final SUB_colorSensor m_colorSensor = new SUB_colorSensor();
-
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
   public double yValue() {
         if(Math.abs(m_driverController.getLeftY()) > 0.2) {

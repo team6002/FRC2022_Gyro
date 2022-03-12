@@ -103,5 +103,6 @@ public final class Constants {
     public static final double kTurretVoltage = 4;
     public static final double kTurretHuntVoltage = 2;
     public static final double kTurretMannualVoltage = 4;
+    public static final double kTurretJoystickVoltage = 1;
   }
 }
