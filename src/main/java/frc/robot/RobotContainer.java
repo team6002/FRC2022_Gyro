@@ -167,11 +167,11 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value)
         .whenPressed(new CMD_TurretMode(m_Turret));
     
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
-        .whenPressed(new CMD_BlueBall(m_Turret));
+    // new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    //     .whenPressed(new CMD_BlueBall(m_Turret));
         
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whenPressed(new CMD_RedBall(m_Turret));
+    // new JoystickButton(m_driverController, Button.kRightBumper.value)
+    //     .whenPressed(new CMD_RedBall(m_Turret));
   }
 
   /**

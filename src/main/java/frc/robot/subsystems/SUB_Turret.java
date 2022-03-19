@@ -23,13 +23,12 @@ public class SUB_Turret extends SubsystemBase{
     private SparkMaxLimitSwitch m_ForwardLimitSwitch = m_Turret.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     private SparkMaxLimitSwitch m_ReverseLimitSwitch = m_Turret.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
-    private double center = 80; //center of the camera (160x120)
-    private boolean onTarget = false;
+    private double center = 160; //center of the camera (160x120)
+    // private boolean onTarget = false;
     public int huntDirection = 1;
 
     //Network Table
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("Turret");
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
     //alliance color picker variable
     String RED = "RED";
@@ -118,7 +117,7 @@ public class SUB_Turret extends SubsystemBase{
     public double readcX() { 
         double x = -1;
         try {
-            x = table.getEntry("cX").getDouble(-1);
+            x = table.getEntry("tx").getDouble(-1);
         }
         catch(Exception e) {
             
@@ -128,7 +127,7 @@ public class SUB_Turret extends SubsystemBase{
     }
 
     public double readcY() {
-        return table.getEntry("cY").getDouble(-1);
+        return table.getEntry("ty").getDouble(-1);
     }
 
     //calculate how far the target is from center
@@ -139,22 +138,14 @@ public class SUB_Turret extends SubsystemBase{
 
     //shooter ball color alliance thangy
 
-    private boolean redBall = true;
-    public void setBallColor(boolean col){
-        redBall = col; 
-    }
+    // private boolean redBall = true;
+    // public void setBallColor(boolean col){
+    //     redBall = col; 
+    // }
 
-    //checks if the alliance color is red or blue
-    public boolean checkChooser(){
-        if (bColor == "RED"){
-            return true;
-        } else return false;
-    }
-
-    //check ball color **DO NOT USE COLOR SENSOR**
-    // public boolean correctBall() {
-    //     if(m_colorSensor.getColor() == Color && m_colorSensor.getColor() != "unknown")
-    //     {
+    // //checks if the alliance color is red or blue
+    // public boolean checkChooser(){
+    //     if (bColor == "RED"){
     //         return true;
     //     } else return false;
     // }
@@ -171,16 +162,6 @@ public class SUB_Turret extends SubsystemBase{
         double targetX = readcX();
         double sentOutput = 0;
         double diffFromCenter = 0;
-
-        // if(redBall != checkChooser()) {
-        //     setOffset();
-        // } else {
-        //     OFFSET = 0;
-        // }
-
-        // SmartDashboard.putBoolean("checkChooser", checkChooser());
-        // SmartDashboard.putString("ballcolor", bColor);
-        // bColor = m_color.getSelected();
 
         if(turretMode == 0) {
             targetPosition = 0;
@@ -235,18 +216,18 @@ public class SUB_Turret extends SubsystemBase{
         m_Turret.setVoltage(sentOutput);
 
         //Shuffleboard Output
-        // SmartDashboard.putNumber("X", readcX());
-        // SmartDashboard.putNumber("Y", readcY());
+        SmartDashboard.putNumber("X", readcX());
+        SmartDashboard.putNumber("Y", readcY());
         SmartDashboard.putNumber("Voltage", sentOutput);
-        // SmartDashboard.putNumber("Difference", diffFromCenter);
+        SmartDashboard.putNumber("Difference", diffFromCenter);
         // SmartDashboard.putBoolean("Target?", onTarget);
         // SmartDashboard.putNumber("Hunting Direction", huntDirection);
-        // SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
-        // SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
+        SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
+        SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
         // SmartDashboard.putBoolean("Ball color???", redBall);
         // SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
         // SmartDashboard.putNumber("Target Encoder", targetPosition);
-        // SmartDashboard.putNumber("Turret Mode", turretMode);
+        SmartDashboard.putNumber("Turret Mode", turretMode);
 
 
     }
