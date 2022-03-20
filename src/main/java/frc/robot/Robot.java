@@ -31,11 +31,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    UsbCamera camera0 = CameraServer.startAutomaticCapture(0);
-    UsbCamera camera1 = CameraServer.startAutomaticCapture(1);
+    // UsbCamera camera0 = CameraServer.startAutomaticCapture(0);
+    // UsbCamera camera1 = CameraServer.startAutomaticCapture(1);
 
-    camera0.setResolution(160, 120);
-    camera1.setResolution(160, 120);
+    // camera0.setResolution(160, 120);
+    // camera1.setResolution(160, 120);
   }
 
   /**
@@ -52,8 +52,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    m_robotContainer.outputX();
-    m_robotContainer.outputY();
+    // m_robotContainer.outputX();
+    // m_robotContainer.outputY();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

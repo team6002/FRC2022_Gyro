@@ -18,11 +18,11 @@ public class CMD_TurretMode extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(m_Turret.getTurretMode() == 1) {
-      m_Turret.setTurretMode(0);
+    if(m_Turret.getTurretMode() == 0) {
+      m_Turret.setTurretMode(1);
     }
     else {
-      m_Turret.setTurretMode(1);
+      m_Turret.setTurretMode(0);
     }
   }
 

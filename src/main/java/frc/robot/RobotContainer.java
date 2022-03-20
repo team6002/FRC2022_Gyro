@@ -79,12 +79,12 @@ public class RobotContainer {
             m_robotDrive));
   }
 
-  public void outputX() {
-      SmartDashboard.putNumber("X-axis", xValue());
-  }
-  public void outputY() {
-      SmartDashboard.putNumber("Y-axis", yValue());
-  }
+//   public void outputX() {
+//       SmartDashboard.putNumber("X-axis", xValue());
+//   }
+//   public void outputY() {
+//       SmartDashboard.putNumber("Y-axis", yValue());
+//   }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -164,8 +164,11 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value)
         .whenPressed(new CMD_SideTurret(m_Turret));
     
-    new JoystickButton(m_driverController, Button.kX.value)
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whenPressed(new CMD_TurretMode(m_Turret));
+    
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+        .whenPressed(new CMD_MannualTurretMode(m_Turret));
     
     // new JoystickButton(m_driverController, Button.kLeftBumper.value)
     //     .whenPressed(new CMD_BlueBall(m_Turret));

@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Turret;
 
-public class CMD_IncreaseTurretPosition extends CommandBase {
-  /** Creates a new CMD_IncreaseTurretPosition. */
+public class CMD_MannualTurretMode extends CommandBase {
+  /** Turns the Turret Mode to mannual mode */
   SUB_Turret m_Turret;
 
-  public CMD_IncreaseTurretPosition(SUB_Turret p_Turret) {
+  public CMD_MannualTurretMode(SUB_Turret p_Turret) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Turret = p_Turret;
   }
@@ -19,7 +19,7 @@ public class CMD_IncreaseTurretPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Turret.increasePosition();
+    m_Turret.setTurretMode(2);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
