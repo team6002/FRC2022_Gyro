@@ -24,7 +24,8 @@ public class SUB_Turret extends SubsystemBase{
     private SparkMaxLimitSwitch m_ForwardLimitSwitch = m_Turret.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     private SparkMaxLimitSwitch m_ReverseLimitSwitch = m_Turret.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
-    private double center = 27; //limelight res 320x240
+    private double center = 27
+    ; //limelight res 320x240
     public int huntDirection = 1;
 
     //Network Table
@@ -48,9 +49,6 @@ public class SUB_Turret extends SubsystemBase{
 
         m_ForwardLimitSwitch.enableLimitSwitch(false);
         m_ReverseLimitSwitch.enableLimitSwitch(false);
-
-        //testing encoders (figure out converstion factor on real robo)
-        // m_Encoder.setPositionConversionFactor((2.0 * Math.PI * 0.0381)/6.0);
     }
 
     //Reads x and y from the network table
